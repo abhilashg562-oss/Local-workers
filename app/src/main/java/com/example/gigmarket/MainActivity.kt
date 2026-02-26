@@ -5,12 +5,13 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.gigmarket.ui.screens.OpeningScreen
+import com.example.gigmarket.ui.theme.DarkBackground
 import com.example.gigmarket.ui.theme.GigMarketTheme
 
 class MainActivity : ComponentActivity() {
@@ -19,29 +20,31 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             GigMarketTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = DarkBackground
+                ) {
+                    val navController = rememberNavController()
+                    
+                    NavHost(
+                        navController = navController,
+                        startDestination = "/"
+                    ) {
+                        composable("/") {
+                            OpeningScreen(navController = navController)
+                        }
+                        composable("/user-login") {
+                            // Placeholder for User Login Screen
+                            LoginPlaceholder(navController = navController, role = "Customer")
+                        }
+                        composable("/provider-login") {
+                            // Placeholder for Provider Login Screen
+                            LoginPlaceholder(navController = navController, role = "Worker")
+                        }
+                    }
                 }
             }
         }
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    GigMarketTheme {
-        Greeting("Android")
-    }
-}
