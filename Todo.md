@@ -1,0 +1,4 @@
+- ✅ Create UserLogin.kt with neon-themed design, inputs for Full Name, Phone Number, OTP, and form logic to accept any 6-digit OTP and navigate to /user-dashboard
+- ✅ Create UserDashboard.kt with neon-themed background and welcome message showing the user's name
+- ✅ Modify MainActivity.kt to add routes for /user-login and /user-dashboard using Jetpack Compose Navigation
+- ✅ The "I Need Help" button already navigates to /user-login (verified in OpeningScreen.kt)
