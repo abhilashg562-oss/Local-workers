@@ -3,11 +3,13 @@ package com.example.gigmarket.ui.theme
 import androidx.compose.ui.graphics.Color
 
 // Background Colors
-val DarkBackground = Color(0xFF0B0F1A)
-val DarkBackgroundSecondary = Color(0xFF121826)
+val DarkBackground = Color(0xFF0F172A)
+val DarkBackgroundSecondary = Color(0xFF1A2440)
 
 // Neon Colors
 val NeonCyan = Color(0xFF00F5FF)
+val NeonElectricBlue = Color(0xFF00F5FF)   // LocalLink "Local" color
+val NeonLinkOrange = Color(0xFFFF7A00)     // LocalLink "Link" color
 val NeonPurple = Color(0xFFB026FF)
 val NeonOrange = Color(0xFFFF9F1C)
 val NeonGreen = Color(0xFF39FF14)

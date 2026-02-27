@@ -14,15 +14,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.gigmarket.ui.components.LocalLinkLogo
 import com.example.gigmarket.ui.theme.DarkBackground
-import com.example.gigmarket.ui.theme.NeonCyan
-import com.example.gigmarket.ui.theme.NeonPurple
+import com.example.gigmarket.ui.theme.NeonElectricBlue
+import com.example.gigmarket.ui.theme.NeonLinkOrange
 
 @Composable
 fun LoginPlaceholder(navController: NavController, role: String) {
-    val accentColor = if (role == "Customer") NeonCyan else NeonPurple
-    
+    val accentColor = if (role == "Customer") NeonElectricBlue else NeonLinkOrange
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -33,37 +35,30 @@ fun LoginPlaceholder(navController: NavController, role: String) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                text = "⚡",
-                style = MaterialTheme.typography.displayLarge
+            LocalLinkLogo(
+                fontSize = 38.sp,
+                taglineFontSize = 13.sp,
+                showTagline = true
             )
-            
-            Spacer(modifier = Modifier.height(16.dp))
-            
-            Text(
-                text = "GigMarket",
-                style = MaterialTheme.typography.displayLarge,
-                color = accentColor
-            )
-            
+
             Spacer(modifier = Modifier.height(32.dp))
-            
+
             Text(
                 text = "$role Login",
                 style = MaterialTheme.typography.headlineMedium,
                 color = MaterialTheme.colorScheme.onBackground
             )
-            
+
             Spacer(modifier = Modifier.height(8.dp))
-            
+
             Text(
                 text = "Coming Soon...",
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
             )
-            
+
             Spacer(modifier = Modifier.height(24.dp))
-            
+
             Text(
                 text = "← Go back to home",
                 style = MaterialTheme.typography.labelLarge,

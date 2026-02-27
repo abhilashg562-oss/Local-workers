@@ -17,13 +17,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,21 +30,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.gigmarket.ui.components.LocalLinkLogo
 import com.example.gigmarket.ui.theme.DarkBackground
 import com.example.gigmarket.ui.theme.DarkBackgroundSecondary
-import com.example.gigmarket.ui.theme.NeonCyan
-import com.example.gigmarket.ui.theme.NeonPurple
+import com.example.gigmarket.ui.theme.NeonElectricBlue
 import com.example.gigmarket.ui.theme.TextSecondary
 
 @Composable
@@ -57,13 +53,13 @@ fun UserLogin(navController: NavController) {
     var otp by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf("") }
 
-    // Animation states
+    // Card glow animation
     val infiniteTransition = rememberInfiniteTransition(label = "glow")
     val glowAlpha by infiniteTransition.animateFloat(
         initialValue = 0.3f,
-        targetValue = 0.7f,
+        targetValue = 0.65f,
         animationSpec = infiniteRepeatable(
-            animation = tween(1500, easing = FastOutSlowInEasing),
+            animation = tween(1800, easing = FastOutSlowInEasing),
             repeatMode = RepeatMode.Reverse
         ),
         label = "glowAlpha"
@@ -81,65 +77,31 @@ fun UserLogin(navController: NavController) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .widthIn(max = 430.dp)
+                .align(Alignment.Center)
                 .padding(horizontal = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            // Neon glowing profile circle at top
-            Box(
-                modifier = Modifier
-                    .size(100.dp)
-                    .shadow(
-                        elevation = 30.dp,
-                        shape = CircleShape,
-                        ambientColor = NeonCyan.copy(alpha = glowAlpha),
-                        spotColor = NeonCyan.copy(alpha = glowAlpha)
-                    )
-                    .clip(CircleShape)
-                    .background(
-                        brush = Brush.radialGradient(
-                            colors = listOf(
-                                NeonCyan.copy(alpha = 0.3f),
-                                Color.Transparent
-                            )
-                        )
-                    )
-                    .border(
-                        width = 2.dp,
-                        brush = Brush.linearGradient(
-                            colors = listOf(NeonCyan, NeonPurple)
-                        ),
-                        shape = CircleShape
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "👤",
-                    fontSize = 48.sp
-                )
-            }
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            // Title
-            Text(
-                text = "User Login",
-                style = MaterialTheme.typography.headlineLarge.copy(
-                    fontWeight = FontWeight.Bold
-                ),
-                color = Color.White
+            // LocalLink logo at top
+            LocalLinkLogo(
+                fontSize = 36.sp,
+                taglineFontSize = 13.sp,
+                showTagline = true
             )
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Subtitle
             Text(
-                text = "Find skilled workers near you",
-                style = MaterialTheme.typography.bodyLarge,
-                color = TextSecondary
+                text = "User Login",
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Medium,
+                color = TextSecondary,
+                letterSpacing = 1.2.sp,
+                textAlign = TextAlign.Center
             )
 
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(36.dp))
 
             // Glassmorphism Card
             Box(
@@ -148,14 +110,14 @@ fun UserLogin(navController: NavController) {
                     .shadow(
                         elevation = 25.dp,
                         shape = RoundedCornerShape(24.dp),
-                        ambientColor = Color.White.copy(alpha = 0.1f),
-                        spotColor = Color.White.copy(alpha = 0.1f)
+                        ambientColor = NeonElectricBlue.copy(alpha = glowAlpha * 0.3f),
+                        spotColor = NeonElectricBlue.copy(alpha = glowAlpha * 0.3f)
                     )
                     .background(
                         brush = Brush.verticalGradient(
                             colors = listOf(
-                                Color.White.copy(alpha = 0.1f),
-                                Color.White.copy(alpha = 0.05f)
+                                Color.White.copy(alpha = 0.08f),
+                                Color.White.copy(alpha = 0.04f)
                             )
                         ),
                         shape = RoundedCornerShape(24.dp)
@@ -164,8 +126,8 @@ fun UserLogin(navController: NavController) {
                         width = 1.dp,
                         brush = Brush.verticalGradient(
                             colors = listOf(
-                                Color.White.copy(alpha = 0.2f),
-                                Color.White.copy(alpha = 0.05f)
+                                NeonElectricBlue.copy(alpha = 0.35f),
+                                NeonElectricBlue.copy(alpha = 0.1f)
                             )
                         ),
                         shape = RoundedCornerShape(24.dp)
@@ -223,64 +185,66 @@ fun UserLogin(navController: NavController) {
                 }
             }
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(28.dp))
 
-            // Continue Button
-            Button(
-                onClick = {
-                    if (name.isNotBlank() && phone.isNotBlank() && otp.length == 6) {
-                        // Navigate to User Dashboard with name
-                        navController.navigate("/user-dashboard/$name")
-                    } else if (otp.length != 6) {
-                        errorMessage = "Enter valid 6-digit OTP"
-                    } else {
-                        errorMessage = "Please fill all fields"
-                    }
-                },
+            // Verify OTP / Continue Button
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp)
                     .shadow(
-                        elevation = 20.dp,
+                        elevation = 18.dp,
                         shape = RoundedCornerShape(28.dp),
-                        ambientColor = NeonCyan.copy(alpha = 0.5f),
-                        spotColor = NeonCyan.copy(alpha = 0.5f)
-                    ),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Transparent
-                ),
-                shape = RoundedCornerShape(28.dp)
-            ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(
-                            brush = Brush.horizontalGradient(
-                                colors = listOf(NeonCyan, NeonPurple)
-                            ),
-                            shape = RoundedCornerShape(28.dp)
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "Continue",
-                        style = MaterialTheme.typography.titleMedium.copy(
-                            fontWeight = FontWeight.Bold
-                        ),
-                        color = Color.White
+                        ambientColor = NeonElectricBlue.copy(alpha = glowAlpha * 0.7f),
+                        spotColor = NeonElectricBlue.copy(alpha = glowAlpha * 0.7f)
                     )
-                }
+                    .background(
+                        brush = Brush.horizontalGradient(
+                            colors = listOf(
+                                NeonElectricBlue.copy(alpha = 0.2f),
+                                NeonElectricBlue.copy(alpha = 0.35f)
+                            )
+                        ),
+                        shape = RoundedCornerShape(28.dp)
+                    )
+                    .border(
+                        width = 1.5.dp,
+                        brush = Brush.horizontalGradient(
+                            colors = listOf(
+                                NeonElectricBlue.copy(alpha = 0.8f),
+                                NeonElectricBlue.copy(alpha = 0.4f)
+                            )
+                        ),
+                        shape = RoundedCornerShape(28.dp)
+                    )
+                    .clickable {
+                        if (name.isNotBlank() && phone.isNotBlank() && otp.length == 6) {
+                            navController.navigate("/user-dashboard/$name")
+                        } else if (otp.length != 6) {
+                            errorMessage = "Enter valid 6-digit OTP"
+                        } else {
+                            errorMessage = "Please fill all fields"
+                        }
+                    },
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "Verify OTP",
+                    fontSize = 17.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = NeonElectricBlue,
+                    letterSpacing = 0.5.sp
+                )
             }
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Back to Home
+            // Back link
             Text(
-                text = "← Go back to home",
+                text = "← Go back",
                 style = MaterialTheme.typography.labelLarge,
                 color = TextSecondary,
-                modifier = Modifier
-                    .clickable { navController.popBackStack() }
+                modifier = Modifier.clickable { navController.popBackStack() }
             )
         }
     }
@@ -298,15 +262,15 @@ fun NeonInputField(
         modifier = modifier
             .fillMaxWidth()
             .background(
-                color = Color.Black.copy(alpha = 0.4f),
+                color = Color.Black.copy(alpha = 0.35f),
                 shape = RoundedCornerShape(16.dp)
             )
             .border(
                 width = 1.dp,
                 brush = Brush.linearGradient(
                     colors = listOf(
-                        NeonCyan.copy(alpha = 0.3f),
-                        NeonCyan.copy(alpha = 0.3f)
+                        NeonElectricBlue.copy(alpha = 0.4f),
+                        NeonElectricBlue.copy(alpha = 0.2f)
                     )
                 ),
                 shape = RoundedCornerShape(16.dp)
@@ -320,7 +284,7 @@ fun NeonInputField(
             textStyle = MaterialTheme.typography.bodyLarge.copy(
                 color = Color.White
             ),
-            cursorBrush = SolidColor(NeonCyan),
+            cursorBrush = SolidColor(NeonElectricBlue),
             keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
             singleLine = true,
             decorationBox = { innerTextField ->
@@ -329,7 +293,7 @@ fun NeonInputField(
                         Text(
                             text = placeholder,
                             style = MaterialTheme.typography.bodyLarge,
-                            color = TextSecondary.copy(alpha = 0.6f)
+                            color = TextSecondary.copy(alpha = 0.5f)
                         )
                     }
                     innerTextField()
