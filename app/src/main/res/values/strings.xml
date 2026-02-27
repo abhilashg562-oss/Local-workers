@@ -1,3 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">GigMarket</string>
+    
+    <!-- Language Names -->
+    <string name="language_english">English</string>
+    <string name="language_hindi">हिन्दी</string>
+    <string name="language_kannada">ಕನ್ನಡ</string>
+    
+    <!-- User Login Screen -->
+    <string name="user_login">User Login</string>
+    <string name="full_name">Full Name</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="enter_otp">Enter 6-digit OTP</string>
+    <string name="verify_otp">Verify OTP</string>
+    <string name="go_back">Go back</string>
+    <string name="enter_valid_otp">Enter valid 6-digit OTP</string>
+    <string name="please_fill_all_fields">Please fill all fields</string>
+    
+    <!-- User Dashboard Screen -->
+    <string name="welcome_user">Hi, %1$s! 👋</string>
+    <string name="welcome">Welcome! 👋</string>
+    <string name="worker_details">Worker Details</string>
+    <string name="nearby_workers">Nearby %1$s</string>
+    <string name="what_service_need">What service do you need?</string>
+    <string name="location_5km">5km</string>
+    <string name="finding_workers">Finding workers nearby…</string>
+    <string name="no_workers_found">No workers found nearby</string>
+    <string name="try_different_service">Try selecting a different service</string>
+    <string name="browse_other_services">Browse Other Services</string>
+    <string name="logout">Logout</string>
+    <string name="location">Location</string>
+    
+    <!-- Service Categories -->
+    <string name="service_electrician">Electrician</string>
+    <string name="service_plumber">Plumber</string>
+    <string name="service_carpenter">Carpenter</string>
+    <string name="service_driver">Driver</string>
+    <string name="service_ac_repair">AC Repair</string>
+    <string name="service_refrigerator">Refrigerator Repair</string>
+    <string name="service_washing_machine">Washing Machine</string>
+    <string name="service_ro_water">RO Water Purifier</string>
+    <string name="service_house_shifting">House Shifting</string>
+    <string name="service_cleaners">Cleaners</string>
+    
+    <!-- Provider Details -->
+    <string name="available_now">● Available Now</string>
+    <string name="not_available">● Not Available</string>
+    <string name="call_now">Call Now</string>
+    <string name="book">Book</string>
+    <string name="about">About</string>
+    <string name="no_description">No description available</string>
+    <string name="phone_number_label">Phone Number</string>
+    <string name="experience">Experience</string>
+    <string name="not_specified">Not specified</string>
+    <string name="languages">Languages</string>
+    <string name="working_hours">Working Hours</string>
+    <string name="certifications">Certifications</string>
+    <string name="skills_services">Skills &amp; Services</string>
+    <string name="service_area">Service Area</string>
+    <string name="location_not_specified">Location not specified</string>
+    
+    <!-- Settings Screen -->
+    <string name="settings">Settings</string>
+    <string name="settings_description">Your settings and preferences</string>
+    
+    <!-- Days of Week -->
+    <string name="monday">Monday</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="thursday">Thursday</string>
+    <string name="friday">Friday</string>
+    <string name="saturday">Saturday</string>
+    <string name="sunday">Sunday</string>
+    <string name="closed">Closed</string>
+    <string name="per_hour">/hour</string>
+    <string name="reviews">%1$d reviews</string>
 </resources>

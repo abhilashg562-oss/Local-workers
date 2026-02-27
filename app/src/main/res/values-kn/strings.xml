@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ಗಿಗ್‌ಮಾರ್ಕೆಟ್</string>
+    
+    <!-- Language Names -->
+    <string name="language_english">English</string>
+    <string name="language_hindi">हिन्दी</string>
+    <string name="language_kannada">ಕನ್ನಡ</string>
+    
+    <!-- User Login Screen -->
+    <string name="user_login">ಬಳಕೆದಾರ ಲಾಗಿನ್</string>
+    <string name="full_name">ಪೂರ್ಣ ಹೆಸರು</string>
+    <string name="phone_number">ಫೋನ್ ಸಂಖ್ಯೆ</string>
+    <string name="enter_otp">6 ಅಂಕಿಗಳ OTP ನಮೂದಿಸಿ</string>
+    <string name="verify_otp">OTP ಪರಿಶೀಲಿಸಿ</string>
+    <string name="go_back">ಹಿಂದೆ ಹೋಗಿ</string>
+    <string name="enter_valid_otp">ಮಾನ್ಯವಾದ 6 ಅಂಕಿಗಳ OTP ನಮೂದಿಸಿ</string>
+    <string name="please_fill_all_fields">ದಯವಿಟ್ಟು ಎಲ್ಲಾ ಫೀಲ್ಡ್‌ಗಳನ್ನು ತುಂಬಿರಿ</string>
+    
+    <!-- User Dashboard Screen -->
+    <string name="welcome_user">ನಮಸ್ತೆ, %1$s! 👋</string>
+    <string name="welcome">ಸ್ವಾಗತ! 👋</string>
+    <string name="worker_details">ಕಾರ್ಮಿಕ ವಿವರಗಳು</string>
+    <string name="nearby_workers">ಸಮೀಪದ %1$s</string>
+    <string name="what_service_need">ನಿಮಗೆ ಯಾವ ಸೇವೆ ಬೇಕು?</string>
+    <string name="location_5km">5ಕಿ.ಮೀ</string>
+    <string name="finding_workers">ಸಮೀಪದ ಕಾರ್ಮಿಕರನ್ನು ಹುಡುಕುತ್ತಿದ್ದಾರೆ…</string>
+    <string name="no_workers_found">ಸಮೀಪದಲ್ಲಿ ಯಾವುದೇ ಕಾರ್ಮಿಕರು ಸಿಗಲಿಲ್ಲ</string>
+    <string name="try_different_service">ಬೇರೆ ಸೇವೆಯನ್ನು ಆಯ್ಕೆ ಮಾಡಿ ಪ್ರಯತೆ ಮಾಡಿ</string>
+    <string name="browse_other_services">ಇತರ ಸೇವೆಗಳನ್ನು ವೀಕ್ಷಿಸಿ</string>
+    <string name="logout">ಲಾಗ್‌ಔಟ್</string>
+    <string name="location">ಸ್ಥಳ</string>
+    
+    <!-- Service Categories -->
+    <string name="service_electrician">ವಿದ್ಯುತ್ ತಂತಿಗಾರ</string>
+    <string name="service_plumber">ಪ್ಲಂಬರ್</string>
+    <string name="service_carpenter">ಮರಗೆಲಸಗಾರ</string>
+    <string name="service_driver">ಚಾಲಕ</string>
+    <string name="service_ac_repair">AC ದುರಸ್ತಿ</string>
+    <string name="service_refrigerator">ಫ್ರಿಜ್ ದುರಸ್ತಿ</string>
+    <string name="service_washing_machine">ವಾಶಿಂಗ್ ಮಶೀನ್</string>
+    <string name="service_ro_water">RO ನೀರು ಶುದ್ಧೀಕರಣ</string>
+    <string name="service_house_shifting">ಮನೆ ಸ್ಥಳಾಂತರ</string>
+    <string name="service_cleaners">ಸ್ವಚ್ಛತಾ ಸಿಬ್ಬಂದಿ</string>
+    
+    <!-- Provider Details -->
+    <string name="available_now">● ಈಗ ಲಭ್ಯ</string>
+    <string name="not_available">● ಲಭ್ಯವಿಲ್ಲ</string>
+    <string name="call_now">ಈಗ ಕರೆ ಮಾಡಿ</string>
+    <string name="book">ಬುಕ್ ಮಾಡಿ</string>
+    <string name="about">ಬಗ್ಗೆ</string>
+    <string name="no_description">ಯಾವುದೇ ವಿವರಣೆ ಲಭ್ಯವಿಲ್ಲ</string>
+    <string name="phone_number_label">ಫೋನ್ ಸಂಖ್ಯೆ</string>
+    <string name="experience">ಅನುಭವ</string>
+    <string name="not_specified">ನಿರ್ದಿಷ್ಟಪಡಿಸಿಲ್ಲ</string>
+    <string name="languages">ಭಾಷೆಗಳು</string>
+    <string name="working_hours">ಕಾರ್ಯಾಲಯದ ಸಮಯ</string>
+    <string name="certifications">ಪ್ರಮಾಣಪತ್ರಗಳು</string>
+    <string name="skills_services">ಕೌಶಲ್ಯಗಳು ಮತ್ತು ಸೇವೆಗಳು</string>
+    <string name="service_area">ಸೇವಾ ಪ್ರದೇಶ</string>
+    <string name="location_not_specified">ಸ್ಥಳ ನಿರ್ದಿಷ್ಟಪಡಿಸಿಲ್ಲ</string>
+    
+    <!-- Settings Screen -->
+    <string name="settings">ಸೆಟ್ಟಿಂಗ್‌ಗಳು</string>
+    <string name="settings_description">ನಿಮ್ಮ ಸೆಟ್ಟಿಂಗ್‌ಗಳು ಮತ್ತು ಆದ್ಯತೆಗಳು</string>
+    
+    <!-- Days of Week -->
+    <string name="monday">ಸೋಮವಾರ</string>
+    <string name="tuesday">ಮಂಗಳವಾರ</string>
+    <string name="wednesday">ಬುಧವಾರ</string>
+    <string name="thursday">ಗುರುವಾರ</string>
+    <string name="friday">ಶುಕ್ರವಾರ</string>
+    <string name="saturday">ಶನಿವಾರ</string>
+    <string name="sunday">ಭಾನುವಾರ</string>
+    <string name="closed">ಮುಚ್ಚಿದೆ</string>
+    <string name="per_hour">/ಗಂಟೆ</string>
+    <string name="reviews">%1$d ವಿಮರ್ಶೆಗಳು</string>
+</resources>

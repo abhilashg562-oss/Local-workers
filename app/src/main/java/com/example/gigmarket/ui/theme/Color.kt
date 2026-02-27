@@ -2,9 +2,13 @@ package com.example.gigmarket.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-// Background Colors
+// Background Colors - Dark Theme
 val DarkBackground = Color(0xFF0F172A)
 val DarkBackgroundSecondary = Color(0xFF1A2440)
+
+// Background Colors - Light Theme
+val LightBackground = Color(0xFFF8FAFC)
+val LightBackgroundSecondary = Color(0xFFFFFFFF)
 
 // Neon Colors
 val NeonCyan = Color(0xFF00F5FF)
@@ -14,13 +18,21 @@ val NeonPurple = Color(0xFFB026FF)
 val NeonOrange = Color(0xFFFF9F1C)
 val NeonGreen = Color(0xFF39FF14)
 
-// Text Colors
+// Text Colors - Dark Theme
 val TextPrimary = Color(0xFFFFFFFF)
 val TextSecondary = Color(0xFF9CA3AF)
 
-// Card Colors
+// Text Colors - Light Theme
+val LightTextPrimary = Color(0xFF1E293B)
+val LightTextSecondary = Color(0xFF64748B)
+
+// Card Colors - Dark Theme
 val CardBackground = Color(0x33FFFFFF)
 val CardBorder = Color(0x33FFFFFF)
+
+// Card Colors - Light Theme
+val LightCardBackground = Color(0xFFFFFFFF)
+val LightCardBorder = Color(0xFFE2E8F0)
 
 // Legacy colors (kept for compatibility)
 val Purple80 = Color(0xFFD0BCFF)
