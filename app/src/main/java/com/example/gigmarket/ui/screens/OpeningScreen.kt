@@ -112,7 +112,7 @@ fun OpeningScreen(navController: NavController) {
             NeonGlowButton(
                 text = "Login as User",
                 glowColor = NeonElectricBlue,
-                onClick = { navController.navigate("/user-login") }
+                onClick = { navController.navigate("/user-login-form") }
             )
 
             Spacer(modifier = Modifier.height(20.dp))
