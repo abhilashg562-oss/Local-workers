@@ -117,9 +117,9 @@ fun OpeningScreen(navController: NavController) {
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // Login as Provider button (orange)
+            // Login as Worker button (orange)
             NeonGlowButton(
-                text = "Login as Provider",
+                text = "Login as Worker",
                 glowColor = NeonLinkOrange,
                 onClick = { navController.navigate("worker_login") }
             )
