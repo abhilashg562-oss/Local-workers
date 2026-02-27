@@ -20,6 +20,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.gigmarket.ui.screens.OpeningScreen
+import com.example.gigmarket.ui.screens.SplashScreen
 import com.example.gigmarket.ui.screens.UserLogin
 import com.example.gigmarket.ui.screens.UserDashboard
 import com.example.gigmarket.ui.screens.WorkerLoginScreen
@@ -43,11 +44,17 @@ class MainActivity : ComponentActivity() {
                     
                     NavHost(
                         navController = navController,
-                        startDestination = "/"
+                        startDestination = "splash"
                     ) {
+                        // 1️⃣ Splash Screen
+                        composable("splash") {
+                            SplashScreen(navController = navController)
+                        }
+                        // 2️⃣ Landing Page
                         composable("/") {
                             OpeningScreen(navController = navController)
                         }
+                        // 3️⃣ User Login
                         composable("/user-login") {
                             UserLogin(navController = navController)
                         }
@@ -130,3 +137,4 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+

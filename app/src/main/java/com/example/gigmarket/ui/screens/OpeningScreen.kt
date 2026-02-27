@@ -1,11 +1,13 @@
 package com.example.gigmarket.ui.screens
 
 import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -19,57 +21,56 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.gigmarket.ui.components.LocalLinkLogo
 import com.example.gigmarket.ui.theme.DarkBackground
 import com.example.gigmarket.ui.theme.DarkBackgroundSecondary
-import com.example.gigmarket.ui.theme.NeonCyan
-import com.example.gigmarket.ui.theme.NeonOrange
-import com.example.gigmarket.ui.theme.NeonPurple
-import com.example.gigmarket.ui.theme.TextSecondary
+import com.example.gigmarket.ui.theme.NeonElectricBlue
+import com.example.gigmarket.ui.theme.NeonLinkOrange
+import kotlin.math.PI
+import kotlin.math.cos
+import kotlin.math.sin
 
 @Composable
 fun OpeningScreen(navController: NavController) {
-    // Animation states
-    val infiniteTransition = rememberInfiniteTransition(label = "glow")
-    val glowAlpha by infiniteTransition.animateFloat(
-        initialValue = 0.5f,
+    val infiniteTransition = rememberInfiniteTransition(label = "landing")
+
+    // Particle drift offset
+    val particleOffset by infiniteTransition.animateFloat(
+        initialValue = 0f,
         targetValue = 1f,
         animationSpec = infiniteRepeatable(
-            animation = tween(1500, easing = FastOutSlowInEasing),
-            repeatMode = RepeatMode.Reverse
+            animation = tween(12000, easing = LinearEasing),
+            repeatMode = RepeatMode.Restart
         ),
-        label = "glowAlpha"
+        label = "particleOffset"
     )
 
-    val scale by infiniteTransition.animateFloat(
-        initialValue = 1f,
-        targetValue = 1.1f,
+    // Background gradient pulse
+    val gradientAlpha by infiniteTransition.animateFloat(
+        initialValue = 0.06f,
+        targetValue = 0.14f,
         animationSpec = infiniteRepeatable(
-            animation = tween(1000, easing = FastOutSlowInEasing),
+            animation = tween(4000, easing = FastOutSlowInEasing),
             repeatMode = RepeatMode.Reverse
         ),
-        label = "scale"
+        label = "gradientAlpha"
     )
 
     Box(
@@ -81,90 +82,45 @@ fun OpeningScreen(navController: NavController) {
                 )
             )
     ) {
+        // Floating particle background
+        ParticleBackground(
+            particleOffset = particleOffset,
+            gradientAlpha = gradientAlpha,
+            modifier = Modifier.fillMaxSize()
+        )
+
+        // Content centered, max width 430dp for mobile-first
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 20.dp),
+                .widthIn(max = 430.dp)
+                .align(Alignment.Center)
+                .padding(horizontal = 32.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            // Lightning Icon with Glow Animation
-            Box(
-                modifier = Modifier
-                    .scale(scale)
-                    .shadow(
-                        elevation = 20.dp,
-                        shape = RoundedCornerShape(50),
-                        ambientColor = NeonOrange.copy(alpha = glowAlpha),
-                        spotColor = NeonOrange.copy(alpha = glowAlpha)
-                    )
-            ) {
-                Text(
-                    text = "⚡",
-                    fontSize = 64.sp,
-                    modifier = Modifier
-                        .shadow(
-                            elevation = 30.dp,
-                            ambientColor = NeonOrange.copy(alpha = glowAlpha),
-                            spotColor = NeonOrange.copy(alpha = glowAlpha)
-                        )
-                )
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // App Name with Gradient
-            Text(
-                text = "GigMarket",
-                style = MaterialTheme.typography.displayLarge.copy(
-                    fontWeight = FontWeight.Bold
-                ),
-                color = Color.White,
-                modifier = Modifier
-                    .background(
-                        brush = Brush.horizontalGradient(
-                            colors = listOf(NeonCyan, NeonPurple)
-                        ),
-                        shape = RoundedCornerShape(8.dp)
-                    )
-                    .padding(horizontal = 16.dp, vertical = 4.dp)
+            // LocalLink logo
+            LocalLinkLogo(
+                fontSize = 48.sp,
+                taglineFontSize = 15.sp,
+                showTagline = true
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(72.dp))
 
-            // Tagline
-            Text(
-                text = "CONNECT. WORK. THRIVE.",
-                style = MaterialTheme.typography.displayMedium.copy(
-                    letterSpacing = 4.sp,
-                    fontWeight = FontWeight.Light
-                ),
-                color = TextSecondary
-            )
-
-            Spacer(modifier = Modifier.height(60.dp))
-
-            // Customer Card
-            RoleCard(
-                icon = "👤",
-                iconGlow = NeonPurple,
-                title = "I need help",
-                subtitle = "Find skilled workers near you",
-                buttonText = "Get Started →",
-                buttonGlow = NeonCyan,
+            // Login as User button (blue)
+            NeonGlowButton(
+                text = "Login as User",
+                glowColor = NeonElectricBlue,
                 onClick = { navController.navigate("/user-login") }
             )
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // Worker Card
-            RoleCard(
-                icon = "🔧",
-                iconGlow = NeonPurple,
-                title = "I'm a worker",
-                subtitle = "Find gigs in your area",
-                buttonText = "Start Earning →",
-                buttonGlow = NeonPurple,
+            // Login as Provider button (orange)
+            NeonGlowButton(
+                text = "Login as Provider",
+                glowColor = NeonLinkOrange,
                 onClick = { navController.navigate("worker_login") }
             )
         }
@@ -172,137 +128,157 @@ fun OpeningScreen(navController: NavController) {
 }
 
 @Composable
-fun RoleCard(
-    icon: String,
-    iconGlow: Color,
-    title: String,
-    subtitle: String,
-    buttonText: String,
-    buttonGlow: Color,
-    onClick: () -> Unit
+fun ParticleBackground(
+    particleOffset: Float,
+    gradientAlpha: Float,
+    modifier: Modifier = Modifier
+) {
+    // Fixed particle data (radius, angle, speed, size, color)
+    val particles = remember {
+        listOf(
+            Triple(Offset(0.15f, 0.2f),  0.003f, NeonElectricBlue),
+            Triple(Offset(0.80f, 0.15f), 0.002f, NeonLinkOrange),
+            Triple(Offset(0.55f, 0.45f), 0.004f, NeonElectricBlue),
+            Triple(Offset(0.25f, 0.70f), 0.0025f, NeonLinkOrange),
+            Triple(Offset(0.70f, 0.75f), 0.003f, NeonElectricBlue),
+            Triple(Offset(0.40f, 0.10f), 0.002f, NeonLinkOrange),
+            Triple(Offset(0.90f, 0.55f), 0.0035f, NeonElectricBlue),
+            Triple(Offset(0.10f, 0.88f), 0.002f, NeonLinkOrange),
+            Triple(Offset(0.65f, 0.30f), 0.003f, NeonElectricBlue),
+            Triple(Offset(0.35f, 0.55f), 0.0025f, NeonLinkOrange),
+            Triple(Offset(0.85f, 0.88f), 0.002f, NeonElectricBlue),
+            Triple(Offset(0.05f, 0.45f), 0.004f, NeonLinkOrange),
+        )
+    }
+
+    Canvas(modifier = modifier) {
+        val w = size.width
+        val h = size.height
+
+        // Draw radial glow accents
+        drawCircle(
+            brush = Brush.radialGradient(
+                colors = listOf(
+                    NeonElectricBlue.copy(alpha = gradientAlpha),
+                    Color.Transparent
+                ),
+                center = Offset(w * 0.2f, h * 0.3f),
+                radius = w * 0.6f
+            ),
+            radius = w * 0.6f,
+            center = Offset(w * 0.2f, h * 0.3f)
+        )
+
+        drawCircle(
+            brush = Brush.radialGradient(
+                colors = listOf(
+                    NeonLinkOrange.copy(alpha = gradientAlpha * 0.8f),
+                    Color.Transparent
+                ),
+                center = Offset(w * 0.8f, h * 0.7f),
+                radius = w * 0.5f
+            ),
+            radius = w * 0.5f,
+            center = Offset(w * 0.8f, h * 0.7f)
+        )
+
+        // Draw floating particles
+        particles.forEachIndexed { index, (origin, speed, color) ->
+            val angle = (particleOffset + index * 0.08f) * 2 * PI.toFloat()
+            val orbitRadius = 30f + index * 8f
+            val cx = origin.x * w + cos(angle * speed * 200) * orbitRadius
+            val cy = origin.y * h + sin(angle * speed * 200) * orbitRadius
+            val particleRadius = 2.5f + (index % 3) * 1.5f
+
+            drawCircle(
+                color = color.copy(alpha = 0.4f + 0.25f * sin(angle + index).toFloat()),
+                radius = particleRadius,
+                center = Offset(cx, cy)
+            )
+
+            // Soft glow around particle
+            drawCircle(
+                brush = Brush.radialGradient(
+                    colors = listOf(
+                        color.copy(alpha = 0.12f),
+                        Color.Transparent
+                    ),
+                    center = Offset(cx, cy),
+                    radius = particleRadius * 5
+                ),
+                radius = particleRadius * 5,
+                center = Offset(cx, cy)
+            )
+        }
+    }
+}
+
+@Composable
+fun NeonGlowButton(
+    text: String,
+    glowColor: Color,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
 
-    val cardScale = if (isPressed) 0.98f else 1f
+    val infiniteTransition = rememberInfiniteTransition(label = "btnGlow")
+    val hoverGlow by infiniteTransition.animateFloat(
+        initialValue = 0.5f,
+        targetValue = 0.9f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(1800, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "hoverGlow"
+    )
+
+    val scale = if (isPressed) 0.97f else 1f
 
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
-            .scale(cardScale)
-            .clip(RoundedCornerShape(24.dp))
+            .scale(scale)
+            .height(56.dp)
             .shadow(
-                elevation = 16.dp,
-                shape = RoundedCornerShape(24.dp),
-                ambientColor = Color.White.copy(alpha = 0.1f),
-                spotColor = Color.White.copy(alpha = 0.1f)
+                elevation = if (isPressed) 8.dp else 18.dp,
+                shape = RoundedCornerShape(28.dp),
+                ambientColor = glowColor.copy(alpha = hoverGlow * 0.6f),
+                spotColor = glowColor.copy(alpha = hoverGlow * 0.6f)
             )
             .background(
-                brush = Brush.verticalGradient(
+                brush = Brush.horizontalGradient(
                     colors = listOf(
-                        Color.White.copy(alpha = 0.1f),
-                        Color.White.copy(alpha = 0.05f)
+                        glowColor.copy(alpha = 0.18f),
+                        glowColor.copy(alpha = 0.28f)
                     )
                 ),
-                shape = RoundedCornerShape(24.dp)
+                shape = RoundedCornerShape(28.dp)
             )
             .border(
-                width = 1.dp,
-                brush = Brush.verticalGradient(
+                width = 1.5.dp,
+                brush = Brush.horizontalGradient(
                     colors = listOf(
-                        Color.White.copy(alpha = 0.2f),
-                        Color.White.copy(alpha = 0.05f)
+                        glowColor.copy(alpha = 0.7f),
+                        glowColor.copy(alpha = 0.4f)
                     )
                 ),
-                shape = RoundedCornerShape(24.dp)
+                shape = RoundedCornerShape(28.dp)
             )
             .clickable(
                 interactionSource = interactionSource,
                 indication = null,
                 onClick = onClick
-            )
-            .padding(20.dp)
+            ),
+        contentAlignment = Alignment.Center
     ) {
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            // Icon with glow
-            Box(
-                modifier = Modifier
-                    .shadow(
-                        elevation = 20.dp,
-                        shape = RoundedCornerShape(50),
-                        ambientColor = iconGlow.copy(alpha = 0.5f),
-                        spotColor = iconGlow.copy(alpha = 0.5f)
-                    )
-            ) {
-                Text(
-                    text = icon,
-                    fontSize = 48.sp
-                )
-            }
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            // Title
-            Text(
-                text = title,
-                style = MaterialTheme.typography.headlineMedium,
-                color = Color.White
-            )
-
-            Spacer(modifier = Modifier.height(4.dp))
-
-            // Subtitle
-            Text(
-                text = subtitle,
-                style = MaterialTheme.typography.bodyLarge,
-                color = TextSecondary
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Neon underline accent
-            Box(
-                modifier = Modifier
-                    .height(2.dp)
-                    .fillMaxWidth(0.3f)
-                    .background(
-                        brush = Brush.horizontalGradient(
-                            colors = listOf(buttonGlow.copy(alpha = 0f), buttonGlow, buttonGlow.copy(alpha = 0f))
-                        ),
-                        shape = RoundedCornerShape(1.dp)
-                    )
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Button with glow effect
-            Button(
-                onClick = onClick,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp)
-                    .shadow(
-                        elevation = 12.dp,
-                        shape = RoundedCornerShape(25.dp),
-                        ambientColor = buttonGlow.copy(alpha = 0.3f),
-                        spotColor = buttonGlow.copy(alpha = 0.5f)
-                    ),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = buttonGlow.copy(alpha = 0.2f),
-                    contentColor = Color.White
-                ),
-                shape = RoundedCornerShape(25.dp)
-            ) {
-                Text(
-                    text = buttonText,
-                    style = MaterialTheme.typography.labelLarge,
-                    color = Color.White
-                )
-            }
-        }
+        Text(
+            text = text,
+            fontSize = 17.sp,
+            fontWeight = FontWeight.Bold,
+            color = glowColor,
+            letterSpacing = 0.5.sp
+        )
     }
 }
-
