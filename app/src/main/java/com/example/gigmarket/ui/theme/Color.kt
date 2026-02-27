@@ -10,6 +10,7 @@ val DarkBackgroundSecondary = Color(0xFF121826)
 val NeonCyan = Color(0xFF00F5FF)
 val NeonPurple = Color(0xFFB026FF)
 val NeonOrange = Color(0xFFFF9F1C)
+val NeonGreen = Color(0xFF39FF14)
 
 // Text Colors
 val TextPrimary = Color(0xFFFFFFFF)

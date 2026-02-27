@@ -165,7 +165,7 @@ fun OpeningScreen(navController: NavController) {
                 subtitle = "Find gigs in your area",
                 buttonText = "Start Earning →",
                 buttonGlow = NeonPurple,
-                onClick = { navController.navigate("/provider-login") }
+                onClick = { navController.navigate("worker_login") }
             )
         }
     }

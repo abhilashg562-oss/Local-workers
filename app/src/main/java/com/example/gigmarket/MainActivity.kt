@@ -7,10 +7,25 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavType
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.core.tween
+import androidx.compose.ui.unit.IntOffset
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.gigmarket.ui.screens.OpeningScreen
+import com.example.gigmarket.ui.screens.UserLogin
+import com.example.gigmarket.ui.screens.UserDashboard
+import com.example.gigmarket.ui.screens.WorkerLoginScreen
+import com.example.gigmarket.ui.screens.WorkerSignupScreen
+import com.example.gigmarket.ui.screens.WorkerHomeScreen
+import com.example.gigmarket.LoginPlaceholder
 import com.example.gigmarket.ui.theme.DarkBackground
 import com.example.gigmarket.ui.theme.GigMarketTheme
 
@@ -34,12 +49,80 @@ class MainActivity : ComponentActivity() {
                             OpeningScreen(navController = navController)
                         }
                         composable("/user-login") {
-                            // Placeholder for User Login Screen
-                            LoginPlaceholder(navController = navController, role = "Customer")
+                            UserLogin(navController = navController)
+                        }
+                        composable(
+                            route = "/user-dashboard/{userName}",
+                            arguments = listOf(
+                                navArgument("userName") {
+                                    type = NavType.StringType
+                                    defaultValue = ""
+                                }
+                            )
+                        ) { backStackEntry ->
+                            val userName = backStackEntry.arguments?.getString("userName") ?: ""
+                            UserDashboard(navController = navController, userName = userName)
                         }
                         composable("/provider-login") {
                             // Placeholder for Provider Login Screen
                             LoginPlaceholder(navController = navController, role = "Worker")
+                        }
+                        composable(
+                            route = "worker_login",
+                            enterTransition = {
+                                fadeIn(animationSpec = tween(350, easing = FastOutSlowInEasing)) +
+                                slideInVertically(
+                                    initialOffsetY = { 30 },
+                                    animationSpec = tween(350, easing = FastOutSlowInEasing)
+                                )
+                            },
+                            exitTransition = {
+                                fadeOut(animationSpec = tween(350, easing = FastOutSlowInEasing)) +
+                                slideOutVertically(
+                                    targetOffsetY = { -30 },
+                                    animationSpec = tween(350, easing = FastOutSlowInEasing)
+                                )
+                            }
+                        ) {
+                            WorkerLoginScreen(navController = navController)
+                        }
+                        composable(
+                            route = "worker_signup",
+                            enterTransition = {
+                                fadeIn(animationSpec = tween(350, easing = FastOutSlowInEasing)) +
+                                slideInVertically(
+                                    initialOffsetY = { 30 },
+                                    animationSpec = tween(350, easing = FastOutSlowInEasing)
+                                )
+                            },
+                            exitTransition = {
+                                fadeOut(animationSpec = tween(350, easing = FastOutSlowInEasing)) +
+                                slideOutVertically(
+                                    targetOffsetY = { -30 },
+                                    animationSpec = tween(350, easing = FastOutSlowInEasing)
+                                )
+                            }
+                        ) {
+                            WorkerSignupScreen(navController = navController)
+                        }
+                        composable(
+                            route = "worker_home",
+                            enterTransition = {
+                                fadeIn(animationSpec = tween(350, easing = FastOutSlowInEasing)) +
+                                slideInVertically(
+                                    initialOffsetY = { 30 },
+                                    animationSpec = tween(350, easing = FastOutSlowInEasing)
+                                )
+                            },
+                            exitTransition = {
+                                fadeOut(animationSpec = tween(350, easing = FastOutSlowInEasing)) +
+                                slideOutVertically(
+                                    targetOffsetY = { -30 },
+                                    animationSpec = tween(350, easing = FastOutSlowInEasing)
+                                )
+                            }
+                        ) {
+                            WorkerHomeScreen(navController = navController)
                         }
                     }
                 }
@@ -47,4 +130,3 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
