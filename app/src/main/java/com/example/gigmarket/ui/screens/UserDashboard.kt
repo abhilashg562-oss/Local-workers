@@ -1,5 +1,6 @@
 package com.example.gigmarket.ui.screens
 
+import android.content.Context
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -38,6 +39,7 @@ import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.Verified
 import androidx.compose.material.icons.filled.WorkHistory
@@ -46,6 +48,8 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -64,6 +68,8 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -71,6 +77,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.gigmarket.R
 import com.example.gigmarket.network.Provider
 import com.example.gigmarket.network.WorkingHours
 import com.example.gigmarket.ui.theme.CardBackground
@@ -82,6 +89,8 @@ import com.example.gigmarket.ui.theme.NeonGreen
 import com.example.gigmarket.ui.theme.NeonOrange
 import com.example.gigmarket.ui.theme.NeonPurple
 import com.example.gigmarket.ui.theme.TextSecondary
+import com.example.gigmarket.viewmodel.AppLanguage
+import com.example.gigmarket.viewmodel.LanguageViewModel
 import com.example.gigmarket.viewmodel.ProviderViewModel
 
 enum class DashboardState {
@@ -94,14 +103,21 @@ enum class DashboardState {
 fun UserDashboard(
     navController: NavController,
     userName: String = "",
-    viewModel: ProviderViewModel = viewModel()
+    viewModel: ProviderViewModel = viewModel(),
+    languageViewModel: LanguageViewModel = viewModel()
 ) {
+    val context = LocalContext.current
     val providers by viewModel.providers.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     val selectedService by viewModel.selectedService.collectAsState()
+    val currentLanguage by languageViewModel.currentLanguage.collectAsState()
 
     var dashboardState by remember { mutableStateOf(DashboardState.SERVICE_SELECTION) }
     var selectedProvider by remember { mutableStateOf<Provider?>(null) }
+    var showLanguageMenu by remember { mutableStateOf(false) }
+
+    val localizedStrings = getLocalizedStrings(context, currentLanguage)
+    val dashboardStrings = getDashboardStrings(context, currentLanguage)
 
     Box(
         modifier = Modifier
@@ -153,10 +169,11 @@ fun UserDashboard(
                 ) {
                     Text(
                         text = when {
-                            dashboardState == DashboardState.SERVICE_SELECTION && userName.isNotEmpty() -> "Hi, $userName! 👋"
-                            dashboardState == DashboardState.SERVICE_SELECTION -> "Welcome! 👋"
+                            dashboardState == DashboardState.SERVICE_SELECTION && userName.isNotEmpty() -> 
+                                String.format(dashboardStrings.welcomeUser, userName)
+                            dashboardState == DashboardState.SERVICE_SELECTION -> dashboardStrings.welcome
                             dashboardState == DashboardState.PROVIDER_DETAILS && selectedProvider != null -> selectedProvider!!.name
-                            else -> "Available Workers"
+                            else -> dashboardStrings.availableWorkers
                         },
                         style = MaterialTheme.typography.headlineSmall.copy(
                             fontWeight = FontWeight.Bold
@@ -165,9 +182,10 @@ fun UserDashboard(
                     )
                     Text(
                         text = when {
-                            dashboardState == DashboardState.PROVIDER_DETAILS -> "Worker Details"
-                            dashboardState == DashboardState.PROVIDER_LIST && selectedService != null -> "Nearby $selectedService"
-                            else -> "What service do you need?"
+                            dashboardState == DashboardState.PROVIDER_DETAILS -> dashboardStrings.workerDetails
+                            dashboardState == DashboardState.PROVIDER_LIST && selectedService != null -> 
+                                String.format(dashboardStrings.nearbyWorkers, selectedService!!)
+                            else -> dashboardStrings.whatServiceNeed
                         },
                         style = MaterialTheme.typography.bodyMedium,
                         color = TextSecondary
@@ -187,15 +205,101 @@ fun UserDashboard(
                     ) {
                         Icon(
                             imageVector = Icons.Default.LocationOn,
-                            contentDescription = "Location",
+                            contentDescription = dashboardStrings.location,
                             tint = NeonCyan,
                             modifier = Modifier.size(16.dp)
                         )
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(
-                            text = "5km",
+                            text = dashboardStrings.location5km,
                             style = MaterialTheme.typography.labelSmall,
                             color = NeonCyan
+                        )
+                    }
+                    
+                    Spacer(modifier = Modifier.width(8.dp))
+                    
+                    // View on Map Button
+                    Text(
+                        text = "📍 Map View",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = NeonCyan,
+                        modifier = Modifier
+                            .background(
+                                color = NeonCyan.copy(alpha = 0.1f),
+                                shape = RoundedCornerShape(20.dp)
+                            )
+                            .padding(horizontal = 12.dp, vertical = 6.dp)
+                            .clickable {
+                                navController.navigate("/user-login")
+                            }
+                    )
+                }
+
+                Spacer(modifier = Modifier.width(8.dp))
+
+                // Settings Icon
+                IconButton(
+                    onClick = { navController.navigate("/settings") }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Settings,
+                        contentDescription = dashboardStrings.settings,
+                        tint = NeonCyan
+                    )
+                }
+
+                // Language Selector
+                Box {
+                    Box(
+                        modifier = Modifier
+                            .clickable { showLanguageMenu = true }
+                            .background(
+                                color = NeonCyan.copy(alpha = 0.15f),
+                                shape = RoundedCornerShape(20.dp)
+                            )
+                            .padding(horizontal = 8.dp, vertical = 4.dp)
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = when (currentLanguage) {
+                                    AppLanguage.ENGLISH -> "EN"
+                                    AppLanguage.HINDI -> "HI"
+                                    AppLanguage.KANNADA -> "KN"
+                                },
+                                color = NeonCyan,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 12.sp
+                            )
+                        }
+                    }
+
+                    DropdownMenu(
+                        expanded = showLanguageMenu,
+                        onDismissRequest = { showLanguageMenu = false }
+                    ) {
+                        DropdownMenuItem(
+                            text = { Text("English") },
+                            onClick = {
+                                languageViewModel.setLanguage(AppLanguage.ENGLISH)
+                                showLanguageMenu = false
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text("हिन्दी") },
+                            onClick = {
+                                languageViewModel.setLanguage(AppLanguage.HINDI)
+                                showLanguageMenu = false
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text("ಕನ್ನಡ") },
+                            onClick = {
+                                languageViewModel.setLanguage(AppLanguage.KANNADA)
+                                showLanguageMenu = false
+                            }
                         )
                     }
                 }
@@ -214,7 +318,8 @@ fun UserDashboard(
                     onServiceClick = { service ->
                         viewModel.selectService(service)
                         dashboardState = DashboardState.PROVIDER_LIST
-                    }
+                    },
+                    serviceCategories = getServiceCategoriesStrings(context, currentLanguage)
                 )
             }
 
@@ -238,7 +343,7 @@ fun UserDashboard(
                             )
                             Spacer(modifier = Modifier.height(16.dp))
                             Text(
-                                text = "Finding workers nearby...",
+                                text = dashboardStrings.findingWorkers,
                                 color = TextSecondary
                             )
                         }
@@ -257,12 +362,12 @@ fun UserDashboard(
                             )
                             Spacer(modifier = Modifier.height(16.dp))
                             Text(
-                                text = "No workers found nearby",
+                                text = dashboardStrings.noWorkersFound,
                                 style = MaterialTheme.typography.titleMedium,
                                 color = Color.White
                             )
                             Text(
-                                text = "Try selecting a different service",
+                                text = dashboardStrings.tryDifferentService,
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = TextSecondary
                             )
@@ -277,7 +382,7 @@ fun UserDashboard(
                                 )
                             ) {
                                 Text(
-                                    text = "Browse Other Services",
+                                    text = dashboardStrings.browseOtherServices,
                                     color = NeonCyan
                                 )
                             }
@@ -294,7 +399,8 @@ fun UserDashboard(
                                 onClick = {
                                     selectedProvider = provider
                                     dashboardState = DashboardState.PROVIDER_DETAILS
-                                }
+                                },
+                                dashboardStrings = dashboardStrings
                             )
                         }
                     }
@@ -307,7 +413,10 @@ fun UserDashboard(
                 exit = fadeOut() + slideOutVertically()
             ) {
                 selectedProvider?.let { provider ->
-                    ProviderDetailsScreen(provider = provider)
+                    ProviderDetailsScreen(
+                        provider = provider,
+                        dashboardStrings = dashboardStrings
+                    )
                 }
             }
         }
@@ -321,7 +430,7 @@ fun UserDashboard(
                 contentAlignment = Alignment.BottomCenter
             ) {
                 Text(
-                    text = "← Logout",
+                    text = "← ${dashboardStrings.logout}",
                     style = MaterialTheme.typography.labelLarge,
                     color = TextSecondary,
                     modifier = Modifier
@@ -338,8 +447,235 @@ fun UserDashboard(
     }
 }
 
+data class DashboardStrings(
+    val welcomeUser: String,
+    val welcome: String,
+    val workerDetails: String,
+    val nearbyWorkers: String,
+    val whatServiceNeed: String,
+    val location: String,
+    val location5km: String,
+    val findingWorkers: String,
+    val noWorkersFound: String,
+    val tryDifferentService: String,
+    val browseOtherServices: String,
+    val logout: String,
+    val settings: String,
+    val availableWorkers: String,
+    val availableNow: String,
+    val notAvailable: String,
+    val callNow: String,
+    val book: String,
+    val about: String,
+    val noDescription: String,
+    val phoneNumber: String,
+    val experience: String,
+    val notSpecified: String,
+    val languages: String,
+    val workingHours: String,
+    val certifications: String,
+    val skillsServices: String,
+    val serviceArea: String,
+    val locationNotSpecified: String,
+    val perHour: String,
+    val reviews: String,
+    val monday: String,
+    val tuesday: String,
+    val wednesday: String,
+    val thursday: String,
+    val friday: String,
+    val saturday: String,
+    val sunday: String,
+    val closed: String
+)
+
+fun getDashboardStrings(context: Context, language: AppLanguage): DashboardStrings {
+    return when (language) {
+        AppLanguage.ENGLISH -> DashboardStrings(
+            welcomeUser = "Hi, %1\$s! 👋",
+            welcome = "Welcome! 👋",
+            workerDetails = "Worker Details",
+            nearbyWorkers = "Nearby %1\$s",
+            whatServiceNeed = "What service do you need?",
+            location = "Location",
+            location5km = "5km",
+            findingWorkers = "Finding workers nearby…",
+            noWorkersFound = "No workers found nearby",
+            tryDifferentService = "Try selecting a different service",
+            browseOtherServices = "Browse Other Services",
+            logout = "Logout",
+            settings = "Settings",
+            availableWorkers = "Available Workers",
+            availableNow = "● Available Now",
+            notAvailable = "● Not Available",
+            callNow = "Call Now",
+            book = "Book",
+            about = "About",
+            noDescription = "No description available",
+            phoneNumber = "Phone Number",
+            experience = "Experience",
+            notSpecified = "Not specified",
+            languages = "Languages",
+            workingHours = "Working Hours",
+            certifications = "Certifications",
+            skillsServices = "Skills & Services",
+            serviceArea = "Service Area",
+            locationNotSpecified = "Location not specified",
+            perHour = "/hour",
+            reviews = "%1\$d reviews",
+            monday = "Monday",
+            tuesday = "Tuesday",
+            wednesday = "Wednesday",
+            thursday = "Thursday",
+            friday = "Friday",
+            saturday = "Saturday",
+            sunday = "Sunday",
+            closed = "Closed"
+        )
+        AppLanguage.HINDI -> DashboardStrings(
+            welcomeUser = "नमस्ते, %1\$s! 👋",
+            welcome = "स्वागत है! 👋",
+            workerDetails = "कार्यकर्ता विवरण",
+            nearbyWorkers = "आस-पास के %1\$s",
+            whatServiceNeed = "आपको किस सेवा की आवश्यकता है?",
+            location = "स्थान",
+            location5km = "5कि.मी.",
+            findingWorkers = "आस-पास के कार्यकर्ता खोज रहे हैं…",
+            noWorkersFound = "आस-पास कोई कार्यकर्ता नहीं मिला",
+            tryDifferentService = "कोई अन्य सेवा चुनने का प्रयास करें",
+            browseOtherServices = "अन्य सेवाएं देखें",
+            logout = "लॉग आउट",
+            settings = "सेटिंग्स",
+            availableWorkers = "उपलब्ध कार्यकर्ता",
+            availableNow = "● अभी उपलब्ध",
+            notAvailable = "● उपलब्ध नहीं",
+            callNow = "अभी कॉल करें",
+            book = "बुक करें",
+            about = "के बारे में",
+            noDescription = "कोई विवरण उपलब्ध नहीं",
+            phoneNumber = "फोन नंबर",
+            experience = "अनुभव",
+            notSpecified = "निर्दिष्ट नहीं",
+            languages = "भाषाएं",
+            workingHours = "कार्य समय",
+            certifications = "प्रमाणपत्र",
+            skillsServices = "कौशल और सेवाएं",
+            serviceArea = "सेवा क्षेत्र",
+            locationNotSpecified = "स्थान निर्दिष्ट नहीं",
+            perHour = "/घंटा",
+            reviews = "%1\$d समीक्षाएं",
+            monday = "सोमवार",
+            tuesday = "मंगलवार",
+            wednesday = "बुधवार",
+            thursday = "गुरुवार",
+            friday = "शुक्रवार",
+            saturday = "शनिवार",
+            sunday = "रविवार",
+            closed = "बंद"
+        )
+        AppLanguage.KANNADA -> DashboardStrings(
+            welcomeUser = "ನಮಸ್ತೆ, %1\$s! 👋",
+            welcome = "ಸ್ವಾಗತ! 👋",
+            workerDetails = "ಕಾರ್ಮಿಕ ವಿವರಗಳು",
+            nearbyWorkers = "ಸಮೀಪದ %1\$s",
+            whatServiceNeed = "ನಿಮಗೆ ಯಾವ ಸೇವೆ ಬೇಕು?",
+            location = "ಸ್ಥಳ",
+            location5km = "5ಕಿ.ಮೀ",
+            findingWorkers = "ಸಮೀಪದ ಕಾರ್ಮಿಕರನ್ನು ಹುಡುಕುತ್ತಿದ್ದಾರೆ…",
+            noWorkersFound = "ಸಮೀಪದಲ್ಲಿ ಯಾವುದೇ ಕಾರ್ಮಿಕರು ಸಿಗಲಿಲ್ಲ",
+            tryDifferentService = "ಬೇರೆ ಸೇವೆಯನ್ನು ಆಯ್ಕೆ ಮಾಡಿ ಪ್ರಯತೆ ಮಾಡಿ",
+            browseOtherServices = "ಇತರ ಸೇವೆಗಳನ್ನು ವೀಕ್ಷಿಸಿ",
+            logout = "ಲಾಗ್‌ಔಟ್",
+            settings = "ಸೆಟ್ಟಿಂಗ್‌ಗಳು",
+            availableWorkers = "ಲಭ್ಯವಿರುವ ಕಾರ್ಮಿಕರು",
+            availableNow = "● ಈಗ ಲಭ್ಯ",
+            notAvailable = "● ಲಭ್ಯವಿಲ್ಲ",
+            callNow = "ಈಗ ಕರೆ ಮಾಡಿ",
+            book = "ಬುಕ್ ಮಾಡಿ",
+            about = "ಬಗ್ಗೆ",
+            noDescription = "ಯಾವುದೇ ವಿವರಣೆ ಲಭ್ಯವಿಲ್ಲ",
+            phoneNumber = "ಫೋನ್ ಸಂಖ್ಯೆ",
+            experience = "ಅನುಭವ",
+            notSpecified = "ನಿರ್ದಿಷ್ಟಪಡಿಸಿಲ್ಲ",
+            languages = "ಭಾಷೆಗಳು",
+            workingHours = "ಕಾರ್ಯಾಲಯದ ಸಮಯ",
+            certifications = "ಪ್ರಮಾಣಪತ್ರಗಳು",
+            skillsServices = "ಕೌಶಲ್ಯಗಳು ಮತ್ತು ಸೇವೆಗಳು",
+            serviceArea = "ಸೇವಾ ಪ್ರದೇಶ",
+            locationNotSpecified = "ಸ್ಥಳ ನಿರ್ದಿಷ್ಟಪಡಿಸಿಲ್ಲ",
+            perHour = "/ಗಂಟೆ",
+            reviews = "%1\$d ವಿಮರ್ಶೆಗಳು",
+            monday = "ಸೋಮವಾರ",
+            tuesday = "ಮಂಗಳವಾರ",
+            wednesday = "ಬುಧವಾರ",
+            thursday = "ಗುರುವಾರ",
+            friday = "ಶುಕ್ರವಾರ",
+            saturday = "ಶನಿವಾರ",
+            sunday = "ಭಾನುವಾರ",
+            closed = "ಮುಚ್ಚಿದೆ"
+        )
+    }
+}
+
+data class ServiceCategoryStrings(
+    val electrician: String,
+    val plumber: String,
+    val carpenter: String,
+    val driver: String,
+    val acRepair: String,
+    val refrigerator: String,
+    val washingMachine: String,
+    val roWater: String,
+    val houseShifting: String,
+    val cleaners: String
+)
+
+fun getServiceCategoriesStrings(context: Context, language: AppLanguage): ServiceCategoryStrings {
+    return when (language) {
+        AppLanguage.ENGLISH -> ServiceCategoryStrings(
+            electrician = "Electrician",
+            plumber = "Plumber",
+            carpenter = "Carpenter",
+            driver = "Driver",
+            acRepair = "AC Repair",
+            refrigerator = "Refrigerator Repair",
+            washingMachine = "Washing Machine",
+            roWater = "RO Water Purifier",
+            houseShifting = "House Shifting",
+            cleaners = "Cleaners"
+        )
+        AppLanguage.HINDI -> ServiceCategoryStrings(
+            electrician = "इलेक्ट्रीशियन",
+            plumber = "प्लंबर",
+            carpenter = "कारपेंटर",
+            driver = "ड्राइवर",
+            acRepair = "एसी मरम्मत",
+            refrigerator = "फ्रिज मरम्मत",
+            washingMachine = "वाशिंग मशीन",
+            roWater = "आरओ वाटर प्यूरीफायर",
+            houseShifting = "घर शिफ्टिंग",
+            cleaners = "क्लीनर"
+        )
+        AppLanguage.KANNADA -> ServiceCategoryStrings(
+            electrician = "ವಿದ್ಯುತ್ ತಂತಿಗಾರ",
+            plumber = "ಪ್ಲಂಬರ್",
+            carpenter = "ಮರಗೆಲಸಗಾರ",
+            driver = "ಚಾಲಕ",
+            acRepair = "AC ದುರಸ್ತಿ",
+            refrigerator = "ಫ್ರಿಜ್ ದುರಸ್ತಿ",
+            washingMachine = "ವಾಶಿಂಗ್ ಮಶೀನ್",
+            roWater = "RO ನೀರು ಶುದ್ಧೀಕರಣ",
+            houseShifting = "ಮನೆ ಸ್ಥಳಾಂತರ",
+            cleaners = "ಸ್ವಚ್ಛತಾ ಸಿಬ್ಬಂದಿ"
+        )
+    }
+}
+
 @Composable
-fun ProviderDetailsScreen(provider: Provider) {
+fun ProviderDetailsScreen(
+    provider: Provider,
+    dashboardStrings: DashboardStrings
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -444,7 +780,7 @@ fun ProviderDetailsScreen(provider: Provider) {
                             color = Color.White
                         )
                         Text(
-                            text = " (${provider.totalReviews} reviews)",
+                            text = " (${provider.totalReviews} ${if (provider.totalReviews == 1) "review" else "reviews"})",
                             style = MaterialTheme.typography.bodyMedium,
                             color = TextSecondary
                         )
@@ -462,7 +798,7 @@ fun ProviderDetailsScreen(provider: Provider) {
                             .padding(horizontal = 16.dp, vertical = 8.dp)
                     ) {
                         Text(
-                            text = if (provider.isAvailable) "● Available Now" else "● Not Available",
+                            text = if (provider.isAvailable) dashboardStrings.availableNow else dashboardStrings.notAvailable,
                             color = if (provider.isAvailable) NeonGreen else Color.Red,
                             style = MaterialTheme.typography.labelMedium
                         )
@@ -489,12 +825,12 @@ fun ProviderDetailsScreen(provider: Provider) {
             ) {
                 Icon(
                     imageVector = Icons.Default.Call,
-                    contentDescription = "Call",
+                    contentDescription = dashboardStrings.callNow,
                     tint = DarkBackground
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "Call Now",
+                    text = dashboardStrings.callNow,
                     color = DarkBackground,
                     fontWeight = FontWeight.Bold
                 )
@@ -511,12 +847,12 @@ fun ProviderDetailsScreen(provider: Provider) {
             ) {
                 Icon(
                     imageVector = Icons.Default.Description,
-                    contentDescription = "Book",
+                    contentDescription = dashboardStrings.book,
                     tint = Color.White
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "Book",
+                    text = dashboardStrings.book,
                     color = Color.White,
                     fontWeight = FontWeight.Bold
                 )
@@ -559,8 +895,8 @@ fun ProviderDetailsScreen(provider: Provider) {
                     // About Section
                     DetailSection(
                         icon = Icons.Default.Description,
-                        title = "About",
-                        content = provider.bio ?: "No description available"
+                        title = dashboardStrings.about,
+                        content = provider.bio ?: dashboardStrings.noDescription
                     )
 
                     HorizontalDivider(
@@ -571,7 +907,7 @@ fun ProviderDetailsScreen(provider: Provider) {
                     // Phone Number
                     DetailSection(
                         icon = Icons.Default.Call,
-                        title = "Phone Number",
+                        title = dashboardStrings.phoneNumber,
                         content = provider.phone
                     )
 
@@ -583,8 +919,8 @@ fun ProviderDetailsScreen(provider: Provider) {
                     // Experience
                     DetailSection(
                         icon = Icons.Default.WorkHistory,
-                        title = "Experience",
-                        content = provider.experience ?: "Not specified"
+                        title = dashboardStrings.experience,
+                        content = provider.experience ?: dashboardStrings.notSpecified
                     )
 
                     HorizontalDivider(
@@ -595,7 +931,7 @@ fun ProviderDetailsScreen(provider: Provider) {
                     // Languages
                     DetailSection(
                         icon = Icons.Default.Language,
-                        title = "Languages",
+                        title = dashboardStrings.languages,
                         content = provider.languages.joinToString(", ")
                     )
 
@@ -607,10 +943,10 @@ fun ProviderDetailsScreen(provider: Provider) {
                         )
                         DetailSection(
                             icon = Icons.Default.AccessTime,
-                            title = "Working Hours",
+                            title = dashboardStrings.workingHours,
                             content = "",
                             customContent = {
-                                WorkingHoursDisplay(hours)
+                                WorkingHoursDisplay(hours, dashboardStrings)
                             }
                         )
                     }
@@ -624,7 +960,7 @@ fun ProviderDetailsScreen(provider: Provider) {
                             )
                             DetailSection(
                                 icon = Icons.Default.Badge,
-                                title = "Certifications",
+                                title = dashboardStrings.certifications,
                                 content = "",
                                 customContent = {
                                     Row(
@@ -660,7 +996,7 @@ fun ProviderDetailsScreen(provider: Provider) {
                             color = CardBorder
                         )
                         Text(
-                            text = "Skills & Services",
+                            text = dashboardStrings.skillsServices,
                             style = MaterialTheme.typography.titleMedium.copy(
                                 fontWeight = FontWeight.Bold
                             ),
@@ -698,8 +1034,8 @@ fun ProviderDetailsScreen(provider: Provider) {
                     // Location
                     DetailSection(
                         icon = Icons.Default.LocationOn,
-                        title = "Service Area",
-                        content = provider.location.address ?: "Location not specified"
+                        title = dashboardStrings.serviceArea,
+                        content = provider.location.address ?: dashboardStrings.locationNotSpecified
                     )
                 }
             }
@@ -749,20 +1085,20 @@ fun DetailSection(
 }
 
 @Composable
-fun WorkingHoursDisplay(hours: WorkingHours) {
+fun WorkingHoursDisplay(hours: WorkingHours, dashboardStrings: DashboardStrings) {
     Column {
-        WorkingHoursRow("Monday", hours.monday)
-        WorkingHoursRow("Tuesday", hours.tuesday)
-        WorkingHoursRow("Wednesday", hours.wednesday)
-        WorkingHoursRow("Thursday", hours.thursday)
-        WorkingHoursRow("Friday", hours.friday)
-        WorkingHoursRow("Saturday", hours.saturday)
-        WorkingHoursRow("Sunday", hours.sunday)
+        WorkingHoursRow(dashboardStrings.monday, hours.monday, dashboardStrings)
+        WorkingHoursRow(dashboardStrings.tuesday, hours.tuesday, dashboardStrings)
+        WorkingHoursRow(dashboardStrings.wednesday, hours.wednesday, dashboardStrings)
+        WorkingHoursRow(dashboardStrings.thursday, hours.thursday, dashboardStrings)
+        WorkingHoursRow(dashboardStrings.friday, hours.friday, dashboardStrings)
+        WorkingHoursRow(dashboardStrings.saturday, hours.saturday, dashboardStrings)
+        WorkingHoursRow(dashboardStrings.sunday, hours.sunday, dashboardStrings)
     }
 }
 
 @Composable
-fun WorkingHoursRow(day: String, hours: String) {
+fun WorkingHoursRow(day: String, hours: String, dashboardStrings: DashboardStrings) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -779,16 +1115,28 @@ fun WorkingHoursRow(day: String, hours: String) {
             style = MaterialTheme.typography.bodyMedium.copy(
                 fontWeight = FontWeight.Medium
             ),
-            color = if (hours == "Closed") Color.Red else NeonGreen
+            color = if (hours == dashboardStrings.closed || hours == "Closed") Color.Red else NeonGreen
         )
     }
 }
 
 @Composable
 fun ServiceCategoryGrid(
-    onServiceClick: (String) -> Unit
+    onServiceClick: (String) -> Unit,
+    serviceCategories: ServiceCategoryStrings
 ) {
-    val categories = ServiceCategories.categories
+    val categories = listOf(
+        ServiceCategories.Service(serviceCategories.electrician, "⚡", "Electrician"),
+        ServiceCategories.Service(serviceCategories.plumber, "🔧", "Plumber"),
+        ServiceCategories.Service(serviceCategories.carpenter, "🪚", "Carpenter"),
+        ServiceCategories.Service(serviceCategories.driver, "🚗", "Driver"),
+        ServiceCategories.Service(serviceCategories.acRepair, "❄️", "AC Repair"),
+        ServiceCategories.Service(serviceCategories.refrigerator, "🧊", "Refrigerator Repair"),
+        ServiceCategories.Service(serviceCategories.washingMachine, "🧺", "Washing Machine"),
+        ServiceCategories.Service(serviceCategories.roWater, "💧", "RO Water Purifier"),
+        ServiceCategories.Service(serviceCategories.houseShifting, "📦", "House Shifting"),
+        ServiceCategories.Service(serviceCategories.cleaners, "🧹", "Cleaners")
+    )
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -799,7 +1147,7 @@ fun ServiceCategoryGrid(
         items(categories) { service ->
             ServiceCategoryCard(
                 service = service,
-                onClick = { onServiceClick(service.name) }
+                onClick = { onServiceClick(service.apiCategory) }
             )
         }
     }
@@ -892,7 +1240,11 @@ fun ServiceCategoryCard(
 }
 
 @Composable
-fun ProviderCard(provider: Provider, onClick: () -> Unit) {
+fun ProviderCard(
+    provider: Provider,
+    onClick: () -> Unit,
+    dashboardStrings: DashboardStrings
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -1005,7 +1357,7 @@ fun ProviderCard(provider: Provider, onClick: () -> Unit) {
                                     fontWeight = FontWeight.Medium
                                 )
                                 Text(
-                                    text = " (${provider.totalReviews} reviews)",
+                                    text = " (${provider.totalReviews} ${if (provider.totalReviews == 1) "review" else "reviews"})",
                                     style = MaterialTheme.typography.bodySmall,
                                     color = TextSecondary
                                 )
@@ -1025,7 +1377,7 @@ fun ProviderCard(provider: Provider, onClick: () -> Unit) {
                             color = NeonCyan
                         )
                         Text(
-                            text = "/hour",
+                            text = dashboardStrings.perHour,
                             style = MaterialTheme.typography.bodySmall,
                             color = TextSecondary
                         )
@@ -1071,7 +1423,7 @@ fun ProviderCard(provider: Provider, onClick: () -> Unit) {
                     ) {
                         Icon(
                             imageVector = Icons.Default.LocationOn,
-                            contentDescription = "Location",
+                            contentDescription = dashboardStrings.location,
                             tint = TextSecondary,
                             modifier = Modifier.size(16.dp)
                         )
@@ -1104,7 +1456,7 @@ fun ProviderCard(provider: Provider, onClick: () -> Unit) {
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Phone,
-                                contentDescription = "Call",
+                                contentDescription = dashboardStrings.callNow,
                                 tint = DarkBackground,
                                 modifier = Modifier.size(20.dp)
                             )

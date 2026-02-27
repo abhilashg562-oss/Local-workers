@@ -4,6 +4,7 @@ import android.app.Activity
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.toArgb
@@ -23,20 +24,34 @@ private val DarkColorScheme = darkColorScheme(
     onSurface = TextPrimary
 )
 
+private val LightColorScheme = lightColorScheme(
+    primary = NeonCyan,
+    secondary = NeonPurple,
+    tertiary = NeonOrange,
+    background = LightBackground,
+    surface = LightBackgroundSecondary,
+    onPrimary = LightBackground,
+    onSecondary = LightTextPrimary,
+    onTertiary = LightBackground,
+    onBackground = LightTextPrimary,
+    onSurface = LightTextPrimary
+)
+
 @Composable
 fun GigMarketTheme(
-    darkTheme: Boolean = true, // Always dark for this app
+    darkTheme: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = DarkColorScheme
+    val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
     
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = DarkBackground.toArgb()
-            window.navigationBarColor = DarkBackground.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = false
+            val backgroundColor = if (darkTheme) DarkBackground else LightBackground
+            window.statusBarColor = backgroundColor.toArgb()
+            window.navigationBarColor = backgroundColor.toArgb()
+            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
         }
     }
 
