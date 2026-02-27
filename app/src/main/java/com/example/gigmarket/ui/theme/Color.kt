@@ -22,6 +22,13 @@ val TextSecondary = Color(0xFF9CA3AF)
 val CardBackground = Color(0x33FFFFFF)
 val CardBorder = Color(0x33FFFFFF)
 
+// Neon Worker Dashboard Background
+val NeonBg1 = Color(0xFF0F0F1A)
+val NeonBg2 = Color(0xFF1A1A2E)
+
+// Neon Pink for button gradient
+val NeonPink = Color(0xFFFF0080)
+
 // Legacy colors (kept for compatibility)
 val Purple80 = Color(0xFFD0BCFF)
 val PurpleGrey80 = Color(0xFFCCC2DC)

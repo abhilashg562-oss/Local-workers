@@ -204,7 +204,8 @@ fun WorkerLoginScreen(navController: NavController) {
                         ),
                         shape = RoundedCornerShape(28.dp)
                     )
-                    .clickable {
+.clickable {
+                        SessionManager.onLogin()
                         navController.navigate("worker_home")
                     },
                 contentAlignment = Alignment.Center
@@ -232,12 +233,16 @@ fun WorkerLoginScreen(navController: NavController) {
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Back link
+            // Back link - Navigate to OpeningScreen
             Text(
                 text = "← Go back",
                 style = MaterialTheme.typography.labelLarge,
                 color = TextSecondary,
-                modifier = Modifier.clickable { navController.popBackStack() }
+                modifier = Modifier.clickable { 
+                    navController.navigate("/") {
+                        popUpTo("worker_login") { inclusive = true }
+                    }
+                }
             )
         }
     }
