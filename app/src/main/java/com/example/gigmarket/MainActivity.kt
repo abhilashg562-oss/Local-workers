@@ -29,7 +29,16 @@ import com.example.gigmarket.ui.screens.WorkerProfileScreen
 import com.example.gigmarket.ui.screens.WorkerLoginScreen
 import com.example.gigmarket.ui.screens.WorkerSignupScreen
 import com.example.gigmarket.ui.screens.WorkerHomeScreen
-import com.example.gigmarket.ui.screens.SettingsScreen
+import com.example.gigmarket.ui.screens.WorkerLanguageScreen
+import com.example.gigmarket.ui.screens.WorkerEarningsScreen
+import com.example.gigmarket.ui.screens.WorkerRequestsScreen
+import com.example.gigmarket.ui.screens.WorkerPendingWorksScreen
+import com.example.gigmarket.ui.screens.WorkerSettingsScreen
+import com.example.gigmarket.ui.screens.WorkerReviewHistoryScreen
+import com.example.gigmarket.ui.screens.WorkerProfileScreen
+import com.example.gigmarket.ui.screens.WorkerPrivacyScreen
+import com.example.gigmarket.ui.screens.WorkerPersonalizationScreen
+import com.example.gigmarket.ui.screens.WorkerUpdateScreen
 import com.example.gigmarket.LoginPlaceholder
 import com.example.gigmarket.ui.theme.DarkBackground
 import com.example.gigmarket.ui.theme.GigMarketTheme
@@ -213,6 +222,196 @@ class MainActivity : ComponentActivity() {
                             }
                         ) {
                             WorkerHomeScreen(navController = navController)
+                        }
+                        composable(
+                            route = "worker_language",
+                            enterTransition = {
+                                fadeIn(animationSpec = tween(350, easing = FastOutSlowInEasing)) +
+                                slideInVertically(
+                                    initialOffsetY = { 30 },
+                                    animationSpec = tween(350, easing = FastOutSlowInEasing)
+                                )
+                            },
+                            exitTransition = {
+                                fadeOut(animationSpec = tween(350, easing = FastOutSlowInEasing)) +
+                                slideOutVertically(
+                                    targetOffsetY = { -30 },
+                                    animationSpec = tween(350, easing = FastOutSlowInEasing)
+                                )
+                            }
+                        ) {
+                            WorkerLanguageScreen(navController = navController)
+                        }
+                        composable(
+                            route = "worker_earnings",
+                            enterTransition = {
+                                fadeIn(animationSpec = tween(350, easing = FastOutSlowInEasing)) +
+                                slideInVertically(
+                                    initialOffsetY = { 30 },
+                                    animationSpec = tween(350, easing = FastOutSlowInEasing)
+                                )
+                            },
+                            exitTransition = {
+                                fadeOut(animationSpec = tween(350, easing = FastOutSlowInEasing)) +
+                                slideOutVertically(
+                                    targetOffsetY = { -30 },
+                                    animationSpec = tween(350, easing = FastOutSlowInEasing)
+                                )
+                            }
+                        ) {
+                            WorkerEarningsScreen(navController = navController)
+                        }
+                        composable(
+                            route = "worker_requests",
+                            enterTransition = {
+                                fadeIn(animationSpec = tween(350, easing = FastOutSlowInEasing)) +
+                                slideInVertically(
+                                    initialOffsetY = { 30 },
+                                    animationSpec = tween(350, easing = FastOutSlowInEasing)
+                                )
+                            },
+                            exitTransition = {
+                                fadeOut(animationSpec = tween(350, easing = FastOutSlowInEasing)) +
+                                slideOutVertically(
+                                    targetOffsetY = { -30 },
+                                    animationSpec = tween(350, easing = FastOutSlowInEasing)
+                                )
+                            }
+                        ) {
+                            WorkerRequestsScreen(navController = navController)
+                        }
+                        composable(
+                            route = "worker_pending_works",
+                            enterTransition = {
+                                fadeIn(animationSpec = tween(350, easing = FastOutSlowInEasing)) +
+                                slideInVertically(
+                                    initialOffsetY = { 30 },
+                                    animationSpec = tween(350, easing = FastOutSlowInEasing)
+                                )
+                            },
+                            exitTransition = {
+                                fadeOut(animationSpec = tween(350, easing = FastOutSlowInEasing)) +
+                                slideOutVertically(
+                                    targetOffsetY = { -30 },
+                                    animationSpec = tween(350, easing = FastOutSlowInEasing)
+                                )
+                            }
+                        ) {
+                            WorkerPendingWorksScreen(navController = navController)
+                        }
+                        composable(
+                            route = "worker_settings",
+                            enterTransition = {
+                                fadeIn(animationSpec = tween(350, easing = FastOutSlowInEasing)) +
+                                slideInVertically(
+                                    initialOffsetY = { 30 },
+                                    animationSpec = tween(350, easing = FastOutSlowInEasing)
+                                )
+                            },
+                            exitTransition = {
+                                fadeOut(animationSpec = tween(350, easing = FastOutSlowInEasing)) +
+                                slideOutVertically(
+                                    targetOffsetY = { -30 },
+                                    animationSpec = tween(350, easing = FastOutSlowInEasing)
+                                )
+                            }
+                        ) {
+                            WorkerSettingsScreen(navController = navController)
+                        }
+                        composable(
+                            route = "worker_review_history",
+                            enterTransition = {
+                                fadeIn(animationSpec = tween(350, easing = FastOutSlowInEasing)) +
+                                slideInVertically(
+                                    initialOffsetY = { 30 },
+                                    animationSpec = tween(350, easing = FastOutSlowInEasing)
+                                )
+                            },
+                            exitTransition = {
+                                fadeOut(animationSpec = tween(350, easing = FastOutSlowInEasing)) +
+                                slideOutVertically(
+                                    targetOffsetY = { -30 },
+                                    animationSpec = tween(350, easing = FastOutSlowInEasing)
+                                )
+                            }
+                        ) {
+                            WorkerReviewHistoryScreen(navController = navController)
+                        }
+                        composable(
+                            route = "worker_profile",
+                            enterTransition = {
+                                fadeIn(animationSpec = tween(350, easing = FastOutSlowInEasing)) +
+                                slideInVertically(
+                                    initialOffsetY = { 30 },
+                                    animationSpec = tween(350, easing = FastOutSlowInEasing)
+                                )
+                            },
+                            exitTransition = {
+                                fadeOut(animationSpec = tween(350, easing = FastOutSlowInEasing)) +
+                                slideOutVertically(
+                                    targetOffsetY = { -30 },
+                                    animationSpec = tween(350, easing = FastOutSlowInEasing)
+                                )
+                            }
+                        ) {
+                            WorkerProfileScreen(navController = navController)
+                        }
+                        composable(
+                            route = "worker_privacy",
+                            enterTransition = {
+                                fadeIn(animationSpec = tween(350, easing = FastOutSlowInEasing)) +
+                                slideInVertically(
+                                    initialOffsetY = { 30 },
+                                    animationSpec = tween(350, easing = FastOutSlowInEasing)
+                                )
+                            },
+                            exitTransition = {
+                                fadeOut(animationSpec = tween(350, easing = FastOutSlowInEasing)) +
+                                slideOutVertically(
+                                    targetOffsetY = { -30 },
+                                    animationSpec = tween(350, easing = FastOutSlowInEasing)
+                                )
+                            }
+                        ) {
+                            WorkerPrivacyScreen(navController = navController)
+                        }
+                        composable(
+                            route = "worker_personalization",
+                            enterTransition = {
+                                fadeIn(animationSpec = tween(350, easing = FastOutSlowInEasing)) +
+                                slideInVertically(
+                                    initialOffsetY = { 30 },
+                                    animationSpec = tween(350, easing = FastOutSlowInEasing)
+                                )
+                            },
+                            exitTransition = {
+                                fadeOut(animationSpec = tween(350, easing = FastOutSlowInEasing)) +
+                                slideOutVertically(
+                                    targetOffsetY = { -30 },
+                                    animationSpec = tween(350, easing = FastOutSlowInEasing)
+                                )
+                            }
+                        ) {
+                            WorkerPersonalizationScreen(navController = navController)
+                        }
+                        composable(
+                            route = "worker_update",
+                            enterTransition = {
+                                fadeIn(animationSpec = tween(350, easing = FastOutSlowInEasing)) +
+                                slideInVertically(
+                                    initialOffsetY = { 30 },
+                                    animationSpec = tween(350, easing = FastOutSlowInEasing)
+                                )
+                            },
+                            exitTransition = {
+                                fadeOut(animationSpec = tween(350, easing = FastOutSlowInEasing)) +
+                                slideOutVertically(
+                                    targetOffsetY = { -30 },
+                                    animationSpec = tween(350, easing = FastOutSlowInEasing)
+                                )
+                            }
+                        ) {
+                            WorkerUpdateScreen(navController = navController)
                         }
                     }
                 }
