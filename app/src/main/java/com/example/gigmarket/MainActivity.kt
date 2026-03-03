@@ -35,18 +35,16 @@ import com.example.gigmarket.ui.screens.WorkerRequestsScreen
 import com.example.gigmarket.ui.screens.WorkerPendingWorksScreen
 import com.example.gigmarket.ui.screens.WorkerSettingsScreen
 import com.example.gigmarket.ui.screens.WorkerReviewHistoryScreen
-import com.example.gigmarket.ui.screens.WorkerProfileScreen
 import com.example.gigmarket.ui.screens.WorkerPrivacyScreen
 import com.example.gigmarket.ui.screens.WorkerPersonalizationScreen
 import com.example.gigmarket.ui.screens.WorkerUpdateScreen
-import com.example.gigmarket.LoginPlaceholder
 import com.example.gigmarket.ui.theme.DarkBackground
 import com.example.gigmarket.ui.theme.GigMarketTheme
 import com.example.gigmarket.ui.theme.LightBackground
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.gigmarket.viewmodel.LanguageViewModel
 import com.example.gigmarket.viewmodel.ThemeViewModel
-
+import com.example.gigmarket.ui.screens.SettingsScreen
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
